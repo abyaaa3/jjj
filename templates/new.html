@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New Entry</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>✍️ Write Something Beautiful</header>
+
+  <div class="container">
+    <form method="post">
+      <input type="text" name="title" placeholder="Title" required>
+      <br><br>
+      <textarea name="content" rows="10" placeholder="Write your thoughts here..." required></textarea>
+      <br><br>
+      <button type="submit" class="button-link">Save Entry</button>
+    </form>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+  </div>
+
+  <div id="saving-overlay">💾 Saving your thoughts...</div>
+
+  <audio id="save-sound" preload="auto">
+    <source src="{{ url_for('static', filename='success.wav') }}" type="audio/wav">
+  </audio>
+
+  <button class="theme-switch" onclick="toggleTheme()">🎨 Mood</button>
+
+  <script>
+    const titleInput = document.querySelector('input[name="title"]');
+    const contentInput = document.querySelector('textarea[name="content"]');
+    const form = document.querySelector('form');
+    const overlay = document.getElementById('saving-overlay');
+    const saveSound = document.getElementById('save-sound');
+
+    window.onload = () => {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'soft') {
+        document.body.classList.add('theme-soft');
+      }
+      titleInput.value = localStorage.getItem('draftTitle') || '';
+      contentInput.value = localStorage.getItem('draftContent') || '';
+    };
+
+    setInterval(() => {
+      localStorage.setItem('draftTitle', titleInput.value);
+      localStorage.setItem('draftContent', contentInput.value);
+    }, 10000);
+
+    form.addEventListener('submit', () => {
+      overlay.style.display = 'block';
+      saveSound.play();
+    });
+
+    function toggleTheme() {
+      const current = localStorage.getItem('theme') || 'default';
+      const next = current === 'default' ? 'soft' : 'default';
+      document.body.className = next === 'soft' ? 'theme-soft' : '';
+      localStorage.setItem('theme', next);
+    }
+  </script>
+</body>
+</html>

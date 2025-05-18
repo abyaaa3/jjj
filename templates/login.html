@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Abhinav & Aadya</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="login-container {% if error %}shake{% endif %}">
+    <h1>🕹️ ENTER PASSWORD TO BEGIN</h1>
+    <form method="post">
+      <input type="password" name="password" placeholder="••••••••••" required>
+      <br>
+      <button type="submit">LOGIN</button>
+    </form>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+      <audio autoplay>
+        <source src="{{ url_for('static', filename='error.wav') }}" type="audio/wav">
+      </audio>
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abhinav & Aadya's Journal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>📖 Abhinav & Aadya's Journal</header>
+
+  <div class="container">
+    <p>Welcome, {{ session.user }}! 🌼</p>
+
+    <a class="button-link" href="{{ url_for('new_entry') }}">➕ New Entry</a>
+    <a class="button-link" href="{{ url_for('logout') }}">🚪 Logout</a>
+
+    {% for entry in entries %}
+      <div class="entry">
+        <h2>{{ entry.title }}</h2>
+        <p>{{ entry.content }}</p>
+        <time>{{ entry.created_at }}</time>
+        <a class="button-link" style="background: #ff9999;" href="{{ url_for('delete_entry', entry_id=entry.id) }}">🗑️ Delete</a>
+      </div>
+    {% else %}
+      <p>No entries yet. Start writing your first journal entry 💌</p>
+    {% endfor %}
+  </div>
+
+  <button class="theme-switch" onclick="toggleTheme()">🎨 Mood</button>
+
+  <script>
+    function toggleTheme() {
+      const current = localStorage.getItem('theme') || 'default';
+      const next = current === 'default' ? 'soft' : 'default';
+      document.body.className = next === 'soft' ? 'theme-soft' : '';
+      localStorage.setItem('theme', next);
+    }
+
+    window.onload = () => {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'soft') {
+        document.body.classList.add('theme-soft');
+      }
+    };
+  </script>
+</body>
+</html>
